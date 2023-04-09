@@ -6,7 +6,8 @@ const mongoose = require("mongoose");
 const connection = require("./configure/db.js");
 const cors = require('cors');
 const bodyparser = require("body-parser");
-const path = require('path')
+const path = require('path');
+const itemRouter = require("./routes/items")
 
 
 
@@ -19,14 +20,9 @@ connection();
 
 const conn = mongoose.connection;
 
-
-
-
-
-
-
-
-
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({extended: true}));
+app.use("/item", itemRouter);
 
 const port = process.env.PORT || 8000;
 app.listen(port, console.log(`Listening on port ${port}...`));
