@@ -8,7 +8,7 @@ const connectDB = require('./configure/db')
 const bodyparser = require("body-parser");
 const path = require('path')
 const { errorHandler } = require('./middleware/errormiddleware');
-const port = process.env.PORT || 8000;
+
 connectDB()
 const path = require('path');
 const itemRouter = require("./routes/items")
