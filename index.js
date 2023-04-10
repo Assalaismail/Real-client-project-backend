@@ -1,37 +1,28 @@
-const express = require('express')
-const app= express()
-const dotenv=require("dotenv")
-const colors = require('colors');
+const express = require("express");
+const app = express();
+const dotenv = require("dotenv");
+const colors = require("colors");
+const cors = require("cors");
+const connectDB = require("./configure/db");
+const bodyParser = require("body-parser");
+const { errorHandler } = require("./middleware/errormiddleware");
+const itemRouter = require("./routes/items");
+
 dotenv.config();
-const cors = require('cors');
-const connectDB = require('./configure/db')
-const bodyparser = require("body-parser");
-const path = require('path')
-const { errorHandler } = require('./middleware/errormiddleware');
+connectDB();
 
-connectDB()
-const path = require('path');
-const itemRouter = require("./routes/items")
-
-
-
-app.use(express.json())
-app.use(express.urlencoded({ extended:false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-connection();
+const port = process.env.PORT || 8000;
 
-const conn = mongoose.connection;
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({extended: true}));
 app.use("/item", itemRouter);
 
-const port = process.env.PORT || 8000;
-app.listen(port, console.log(`Listening on port ${port}...`));
+app.use("/api", require("./routes/user")); // Raoul route for users
+app.use(errorHandler); // Error handler for default stack response
 
-app.use('/api', require('./routes/user')) //raoul route for users
-app.use(errorHandler) //error handler for default stack response
-app.listen(port, () => console.log(`server listening on port ${port}`));
-
-    
+app.listen(port, () => console.log(`Server listening on port ${port}...`));
