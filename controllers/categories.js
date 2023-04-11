@@ -38,7 +38,7 @@ const postcategory=async(req,res)=>{
   //delete a category
 const deletecategory = async (req, res) => {
     try {
-      const category = await categoriesModels.findByIdAndDelete(req.params.id);
+      const category = await categoryModels.findByIdAndDelete(req.params.id);
       if (!category) { 
         return res.status(404).json({ error: true, message: 'Category not found' });
       }
@@ -52,7 +52,7 @@ const deletecategory = async (req, res) => {
     //update a product
 const updatecategory = async (req, res) => {
     try {
-      const category= await itemsModels.findById(req.params.id); 
+      const category= await categoryModels.findById(req.params.id); 
       if (!category) { 
         return res.status(404).json({ error: true, 
                                       message: 'Category not found' });
