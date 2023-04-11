@@ -2,14 +2,13 @@ const mongoose = require("mongoose");
 const dotenv = require('dotenv')
 dotenv.config()
 mongoose.set("strictQuery", true);
-const connectDB = async () => {
+module.exports = async function connection() {
     try {
-        const cnct = await mongoose.connect(process.env.DB)
-        console.log (`MongoDB Connected: ${cnct.connection.host}`.cyan.underline);
+        await mongoose.connect(process.env.DB);
+        console.log("Connected to database");
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        console.log("ERROR! Could not connect to database");
         process.exit(1)
     }
-}
-
-module.exports = connectDB 
+};
