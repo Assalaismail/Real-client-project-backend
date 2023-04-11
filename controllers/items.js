@@ -23,6 +23,7 @@ const getitems=async(req,res)=>{
     }
 }
 
+
 //add new product
  const postitems=async(req,res)=>{
   //const {image} = req.body;
