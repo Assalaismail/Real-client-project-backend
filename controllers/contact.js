@@ -1,85 +1,42 @@
-// const asyncHandler = require("express-async-handler");
-// const Contact = require("../models/contact");
+const express = require("express");
+const asyncHandler = require('express-async-handler')
+const Contactus = require("../models/contact");
 
-// // @desc    Create a new contact message
-// // @route   POST /api/contacts
-// // @access  Public
-// const createContact = asyncHandler(async (req, res) => {
-//   const { fullName, email, message } = req.body;
-
-//   const contact = await Contact.create({
-//     userID: req.user._id,
-//     fullName,
-//     email,
-//     message,
-//   });
-
-//   if (contact) {
-//     res.status(201).json({
-//       _id: contact.id,
-//       userID: contact.userID,
-//       fullName: contact.fullName,
-//       email: contact.email,
-//       message: contact.message,
-//     });
-//   } else {
-//     res.status(400);
-//     throw new Error("Invalid contact data");
-//   }
-// });
-
-// // @desc    Get all contact messages
-// // @route   GET /api/contacts
-// // @access  Private/Admin
-// const getContacts = asyncHandler(async (req, res) => {
-//   const contacts = await Contact.find({ userID: req.user._id });
-//   res.json(contacts);
-// });
-
-// module.exports = {
-//   createContact,
-//   getContacts,
-// };
-
-const asyncHandler = require("express-async-handler");
-const Contact = require("../models/contact");
-
-// @desc    Create a new contact message
-// @route   POST /api/contacts
-// @access  Private
-const createContact = asyncHandler(async (req, res) => {
-  const { fullName, email, message } = req.body;
-
-  const contact = await Contact.create({
-    user: req.user._id,
-    fullName,
-    email,
-    message,
-  });
-
-  if (contact) {
-    res.status(201).json({
-      _id: contact.id,
-      user: contact.user,
-      fullName: contact.fullName,
-      email: contact.email,
-      message: contact.message,
-    });
-  } else {
-    res.status(400);
-    throw new Error("Invalid contact data");
+const getcontactus = async (req, res) => {
+  try {
+    const getcontact = await Contactus.find();
+    res.status(200).json(getcontact);
+  } catch (err) {
+    res.json({ message: err });
   }
-});
+};
 
-// @desc    Get all contact messages
-// @route   GET /api/contacts
-// @access  Private/Admin
-const getContacts = asyncHandler(async (req, res) => {
-  const contacts = await Contact.find({ user: req.user._id });
-  res.json(contacts);
-});
+const postcontactus = async (req, res) => {
+  if (!req.body.fullName || !req.body.Message || !req.body.mail) {
+    res.status(400).json({ message: "Error" });
+  } else {
+    const contactpost = await Contactus.create({
+      fullName: req.body.fullName,
+      email: req.body.mail,
+      Message: req.body.Message,
+    });
+    return res.status(200).json(contactpost);
+  }
+};
+
+const contUs = asyncHandler(async(req, res) => {
+  const result = await Contactus.findByIdAndRemove(req.params.id);
+
+  if(!result) {
+    res.status(400)
+    throw new Error('mesh mawjoud aslan la nemhi');
+  }
+
+  res.status(200).json({id: req.params.id})
+})
 
 module.exports = {
-  createContact,
-  getContacts,
+  getcontactus,
+  postcontactus,
+  contUs,
 };
