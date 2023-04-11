@@ -9,7 +9,7 @@ const { getcategories,
 router.get("/getcategory", getcategories)
 router.post("/addcategory", postcategory)
 router.delete("/delcategory/:id",deletecategory)
-router.put("/updcategory:id", updatecategory)
+router.put("/updcategory/:id", updatecategory)
 
 
 module.exports=router;
