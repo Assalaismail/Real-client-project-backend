@@ -49,7 +49,7 @@ const deletecategory = async (req, res) => {
     }
   };
 
-    //update a product
+    //update category
 const updatecategory = async (req, res) => {
     try {
       const category= await categoryModels.findById(req.params.id); 
