@@ -31,7 +31,7 @@ const items= new mongoose.Schema({
            type: Number, 
         },
    
-   category:{
+   category_id:{
          type: ObjectId,
          ref: "categories",
          //required: [true, "product must belong to a category"],
