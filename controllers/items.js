@@ -1,14 +1,16 @@
 const express = require('express');
 const itemsModels = require ('../models/items.js');
-const cloudinary = require('../utils/cloudinary');
-const ErrorResponse = require('../utils/errorResponse');
+const cloudinary = require('cloudinary').v2;
+const path = require("path");
+const { url } = require('inspector');
 
 
 cloudinary.config({
-  cloud_name: 'dnwicbvxw',
-  api_key: '268686878836367',
-  api_secret: '27Tl2zZdeOG0k-hBPhk0tRBzP7c'
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
 });
+
 
 //view all products
 const getitems=async(req,res)=>{
@@ -25,38 +27,33 @@ const getitems=async(req,res)=>{
 
 //add new product
  const postitems=async(req,res)=>{
-  //const {image} = req.body;
+
     try{
-      // const result = await cloudinary.uploader.upload(image, {
-      // folder: "products",
-      //  })
+      const result = await cloudinary.uploader.upload(req.file.path);
     if(!req.body){
         return res.status(400).json({message:"Error"})
     }
     else{
+
         const items=await itemsModels.create({
         name:req.body.name,
         description:req.body.description,
         price:req.body.price,
         weight:req.body.weight,
         discount_per:req.body.discount_per,
-        // image: {
-        //     public_id: result.public_id,
-        //     url: result.secure_url
-        //   },
-            })
+       
+        image: {
+          public_id: result.public_id,
+          url: result.secure_url,
+        },
+            });
           
-       return res.status(200).json(items)
+       return res.status(200).json({message: "product created successfully"})
     }}
     catch(err){
         console.log("error ",err)
     }
 }
-
-
-
-
-
 
 //delete a product
 const deleteitems = async (req, res) => {
