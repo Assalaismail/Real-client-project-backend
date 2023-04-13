@@ -38,7 +38,7 @@ const items= new mongoose.Schema({
    },
 
    price_after_discount: {
-         type: number,
+         type: Number,
          default: 0,
        },
 
