@@ -7,7 +7,7 @@ const {getitems,postitems,deleteitems, updateitems}=require("../controllers/item
 router.get("/getitem",getitems)
 router.post("/additem",upload.single('image'),postitems)
 router.delete("/delitem/:id",deleteitems)
-router.put("/upditem/:id",updateitems)
+router.put("/upditem/:id",upload.single('image'),updateitems)
 
 
 module.exports=router;
