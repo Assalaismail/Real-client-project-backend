@@ -12,9 +12,13 @@ const path = require("path");
 const { errorHandler } = require("./middleware/errormiddleware");
 const conn = mongoose.connection;
 const itemRouter = require("./routes/items");
+<<<<<<< HEAD
+const contactusRoutes = require("./routes/contact");
+=======
 const contactRouter = require("./routes/contact");
 const catRouter = require("./routes/categories")
 
+>>>>>>> ed3a1bca3ad36192e498bba06457f6d13029f160
 
 connection();
 
@@ -29,8 +33,7 @@ app.use("/cat", catRouter);
 
 const port = process.env.PORT || 8000;
 
-app.use("/api/contacts", contactRouter);
-
+app.use("/contactus", contactusRoutes);
 app.use("/api", require("./routes/user")); //raoul route for users
 app.use(errorHandler); //error handler for default stack response
 app.listen(port, () => console.log(`server listening on port ${port}`));

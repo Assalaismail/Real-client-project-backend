@@ -1,26 +1,23 @@
 const mongoose = require("mongoose");
+const contactusSchema=mongoose.Schema({
+    fullName:{
+        type:String,
+        require:false
+    },
 
-const contactSchema = mongoose.Schema(
-  {
-    userID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+    Message:{
+        type:String,
+        require:false
     },
-    fullName: {
-      type: String,
+    mail:{
+        type:String,
+        require:false
     },
-    email: {
-      type: String,
-    },
-    message: {
-      type: String,
-    },
-  },
-  {
+
+},
+    {
     timestamps: true,
-  }
-);
-
-const Contact = mongoose.model("Contact", contactSchema);
-
-module.exports = Contact;
+    }
+    
+)
+module.exports = mongoose.model("Contactus", contactusSchema);
