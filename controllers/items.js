@@ -40,6 +40,7 @@ const getitems=async(req,res)=>{
         price:req.body.price,
         weight:req.body.weight,
         discount_per:req.body.discount_per,
+        
         // image: {
         //     public_id: result.public_id,
         //     url: result.secure_url
