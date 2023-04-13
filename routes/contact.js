@@ -6,7 +6,7 @@ const { protect, isAdmin } = require("../middleware/authMiddleware");
 
 const {getcontactus, postcontactus, contUs} = require("../controllers/contact");
 //cleanest way
-router.route('/').get(protect, getcontactus).post(protect, postcontactus)
+router.route('/').get( getcontactus).post(postcontactus)
 
-router.route("/:id").delete(protect, contUs);
+router.route("/:id").delete( contUs);
 module.exports=router;
