@@ -13,6 +13,8 @@ const { errorHandler } = require("./middleware/errormiddleware");
 const conn = mongoose.connection;
 const itemRouter = require("./routes/items");
 const contactRouter = require("./routes/contact");
+const catRouter = require("./routes/categories")
+
 
 connection();
 
@@ -23,6 +25,7 @@ app.use(cors());
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use("/item", itemRouter);
+app.use("/cat", catRouter);
 
 const port = process.env.PORT || 8000;
 
