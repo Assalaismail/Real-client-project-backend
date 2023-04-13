@@ -37,9 +37,9 @@ const items= new mongoose.Schema({
          //required: [true, "product must belong to a category"],
    },
 
-   discounted: {
-         type: Boolean,
-         default: false,
+   price_after_discount: {
+         type: number,
+         default: 0,
        },
 
    discount_per:{
