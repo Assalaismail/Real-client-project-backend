@@ -29,11 +29,11 @@ const getitems=async(req,res)=>{
  const postitems=async(req,res)=>{
 
     try{
-      const result = await cloudinary.uploader.upload(req.file.path);
-    if(!req.body){
-        return res.status(400).json({message:"Error"})
-    }
-    else{
+    //   const result = await cloudinary.uploader.upload(req.file.path);
+    // if(!req.body){
+    //     return res.status(400).json({message:"Error"})
+    // }
+    // else{
 
         const items=await itemsModels.create({
         name:req.body.name,
@@ -42,14 +42,14 @@ const getitems=async(req,res)=>{
         weight:req.body.weight,
         discount_per:req.body.discount_per,
        
-        image: {
-          public_id: result.public_id,
-          url: result.secure_url,
-        },
+        // image: {
+        //   public_id: result.public_id,
+        //   url: result.secure_url,
+        // },
             });
           
-       return res.status(200).json({message: "product created successfully"})
-    }}
+       return res.status(200).json({message: "product created successfully"},items)
+    }
     catch(err){
         console.log("error ",err)
     }

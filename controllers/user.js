@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const asyncHandler = require('express-async-handler')
 const User = require('../models/user')
+const Carts = require('../models/cart')
 
 //generate JWT token
 const generateToken = (id) => {
@@ -61,12 +62,21 @@ const registerUser = asyncHandler(async(req, res) => {
   })
 
   if(user){
+    const items=[]
+    Carts.create({
+      user_id:user.id,
+      items,
+      total:0,
+      
+    })
+
     res.status(201).json({
       _id: user.id,
       name: user.name,
       email:user.email,
       token: generateToken(user._id),
-      userType: user.userType
+      userType: user.userType,
+      
     })
   } else {
     res.status(400)
