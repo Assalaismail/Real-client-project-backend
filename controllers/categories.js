@@ -16,24 +16,22 @@ const getcategories=async(req,res)=>{
 }
 
 //add new category
-const postcategory=async(req,res)=>{
-      try{
-      
-      if(!req.body){
-          return res.status(400).json({message:"Error"})
-      }
-      else{
-          const categories=await categoryModels.create({
-          name_category:req.body.name_category,
-      
-              })
-            
-         return res.status(200).json(categories)
-      }}
-      catch(err){
-          console.log("error ",err)
-      }
+const postcategory = async (req, res) => {
+  
+  try {
+    const product = new categoryModels ({
+      name_category:req.body.name_category,
+     
+    });
+    await product.save();
+    res.status(201).send(product);
+  } catch (error) {
+    res.status(400).send(error);
   }
+};
+ 
+
+
 
   //delete a category
 const deletecategory = async (req, res) => {
