@@ -11,12 +11,24 @@ cloudinary.config({
   api_secret: process.env.API_SECRET
 });
 
+//get single product
+const getitembyid = async (req, res) => {
+  console.log("ENTERED GET ITEM BY ID");
+  try {
+    const item = await itemsModels.findById(req.params.id).populate("category");
+    console.log("ITEM: ", item);
+    res.status(200).json(item);
+  } catch (err) {
+    res.json({ message: err });
+  }
+};
+
 
 //view all products
 const getitems=async(req,res)=>{
     console.log("ENTERED GET ITEM")
     try{
-    const item=await itemsModels.find();
+    const item=await itemsModels.find().populate("category");
     console.log("ITEM: ", item)
     res.status(200).json(item)
     }
@@ -54,7 +66,7 @@ function calculateDiscountedPrice(price, discountPercentage) {
         price:req.body.price,
         weight:req.body.weight,
         discount_per:req.body.discount_per,
-        // category_id: req.body.category_id,
+        category: req.body.category,
         image: {
           public_id: result.public_id,
           url: result.secure_url,
@@ -128,7 +140,7 @@ const updateitems = async (req, res) => {
       item.discount_per = newDiscountPercentage;
     }
     if (req.body.category_id) {
-      item.category_id = req.body.category_id;
+      item.category = req.body.category;
     }
     if (req.body.price) {
       item.price = req.body.price;
@@ -143,12 +155,53 @@ const updateitems = async (req, res) => {
 };
 
 
+//retrieve product based on specific category
+const getItemsByCategory = async (req, res) => {
+ 
+  // console.log("ENTERED GET ITEM")
+  // try{
+  // const category_id = req.params.category_id;
+  // const item = await itemsModels.find({ category: category_id }).populate("category");
+  // console.log("ITEM: ", item);
+  // res.status(200).json(item);
+  // }
+  // catch(err){
+  // res.json({ message: err });
+  // }
+  console.log("ENTERED GET ITEM")
+  console.log("ENTERED GET ITEM");
+  try {
+    const categoryName = req.params.categoryName;
+    const items = await itemsModels.aggregate([
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $unwind: "$category",
+      },
+      {
+        $match: {
+          "category.name_category": categoryName,
+        },
+      },
+    ]);
+    console.log("ITEMS: ", items);
+    res.status(200).json(items);
+  } catch (err) {
+    res.json({ message: err });
+  }
 
+};
 
-
-
-
+  
 module.exports={
+  getItemsByCategory,
+  getitembyid,
   getitems,
   postitems,
   deleteitems,

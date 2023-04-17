@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
+const{Schema,model}=mongoose;
 
 
 const items= new mongoose.Schema({
@@ -31,11 +32,11 @@ const items= new mongoose.Schema({
            type: Number, 
         },
    
-   category_id:{
-         type: ObjectId,
-         ref: "categories",
-         //required: [true, "product must belong to a category"],
-   },
+   category:{
+         type: Schema.Types.ObjectId,
+         ref:"categories",
+         required:[true, "Please include a Category"]
+     },
 
    price_after_discount: {
          type: Number,
