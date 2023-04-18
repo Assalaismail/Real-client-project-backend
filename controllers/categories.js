@@ -1,6 +1,12 @@
 const express = require('express');
 const categoryModels = require ("../models/categories")
+const cloudinary = require('cloudinary').v2;
 
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
+});
 
 //view all categories
 const getcategories=async(req,res)=>{
@@ -15,12 +21,30 @@ const getcategories=async(req,res)=>{
     }
 }
 
+//get single product
+const getcategorybyid = async (req, res) => {
+  console.log("ENTERED GET CATEGORY BY ID");
+  try {
+    const category = await categoryModels.findById(req.params.id);
+    console.log("CATEGORY: ", category);
+    res.status(200).json(category);
+  } catch (err) {
+    res.json({ message: err });
+  }
+};
+
 //add new category
 const postcategory = async (req, res) => {
   
   try {
+    const result = await cloudinary.uploader.upload(req.file.path);
+
     const product = new categoryModels ({
       name_category:req.body.name_category,
+      image_category: {
+        public_id: result.public_id,
+        url: result.secure_url,
+      },
      
     });
     await product.save();
@@ -71,6 +95,7 @@ const updatecategory = async (req, res) => {
 
 module.exports={
     getcategories,
+    getcategorybyid,
     postcategory,
     deletecategory,
     updatecategory,
