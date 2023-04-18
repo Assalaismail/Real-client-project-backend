@@ -49,26 +49,35 @@ function calculateDiscountedPrice(price, discountPercentage) {
 
     try{
       const result = await cloudinary.uploader.upload(req.file.path);
+  
+
     if(!req.body){
         return res.status(400).json({message:"Error"})
     }
     else{
 
+      const price = req.body.price;
+      const discountPercentage = req.body.discount_per || 0; // default to 0 if not provided
+      const priceAfterDiscount = calculateDiscountedPrice(price, discountPercentage);
+      
         const items=await itemsModels.create({
         name:req.body.name,
         description:req.body.description,
         price:req.body.price,
         weight:req.body.weight,
         discount_per:req.body.discount_per,
-       
+        category: req.body.category,
         image: {
           public_id: result.public_id,
           url: result.secure_url,
         },
+        discount_per: discountPercentage,
+        price_after_discount: priceAfterDiscount,
+       
             });
           
-       return res.status(200).json({message: "product created successfully"},items)
-    }
+       return res.status(200).json({message: "product created successfully"})
+    }}
     catch(err){
         console.log("error ",err)
     }
