@@ -155,19 +155,24 @@ const updateitems = async (req, res) => {
 };
 
 
-//retrieve product based on specific category
+//retrieve product based on specific category id
+
 const getItemsByCategory = async (req, res) => {
  
-  // console.log("ENTERED GET ITEM")
-  // try{
-  // const category_id = req.params.category_id;
-  // const item = await itemsModels.find({ category: category_id }).populate("category");
-  // console.log("ITEM: ", item);
-  // res.status(200).json(item);
-  // }
-  // catch(err){
-  // res.json({ message: err });
-  // }
+  console.log("ENTERED GET ITEM")
+  try{
+  const category_id = req.params.category_id;
+  const item = await itemsModels.find({ category: category_id }).populate("category");
+  console.log("ITEM: ", item);
+  res.status(200).json(item);
+  }
+  catch(err){
+  res.json({ message: err });
+  }
+}
+
+//retrieve product based on specific category name
+const getItemsByCategoryName = async (req, res) => {
   console.log("ENTERED GET ITEM")
   console.log("ENTERED GET ITEM");
   try {
@@ -201,6 +206,7 @@ const getItemsByCategory = async (req, res) => {
   
 module.exports={
   getItemsByCategory,
+  getItemsByCategoryName,
   getitembyid,
   getitems,
   postitems,
