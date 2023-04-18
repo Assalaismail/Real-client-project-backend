@@ -3,14 +3,18 @@ const Address = require("../models/address");
 
 // Create a new address
 const createAddress = asyncHandler(async (req, res) => {
-  const { userID, city, street, building, floor } = req.body;
+  const {name, phone, email, city, street, building, floor, details, location } = req.body;
 
   const address = await Address.create({
-    userID,
+    name,
+    phone,
+    email,
     city,
     street,
     building,
     floor,
+    details,
+    location,
   });
 
   res.status(201).json({
@@ -46,44 +50,30 @@ const getAddressById = asyncHandler(async (req, res) => {
 
 // Update an address
 const updateAddress = asyncHandler(async (req, res) => {
-  const { userID, city, street, building, floor } = req.body;
-
   const address = await Address.findById(req.params.id);
-
-  if (address) {
-    address.userID = userID;
-    address.city = city;
-    address.street = street;
-    address.building = building;
-    address.floor = floor;
-
-    const updatedAddress = await address.save();
-
-    res.status(200).json({
-      success: true,
-      data: updatedAddress,
-    });
-  } else {
-    res.status(404);
-    throw new Error("Address not found");
+  if(!address) {
+      res.status(400)
+      throw new Error('address not found');
   }
-});
+
+  const updatedAddress = await Address.findByIdAndUpdate(req.params.id, req.body, {
+      new: true, 
+  })
+  res.status(200).json(updatedAddress)
+})
 
 // Delete an address
 const deleteAddress = asyncHandler(async (req, res) => {
-  const address = await Address.findById(req.params.id);
+  const address = await Address.findByIdAndRemove(req.params.id);
 
-  if (address) {
-    await address.remove();
-
-    res.status(200).json({
-      success: true,
-      message: "Address removed",
-    });
-  } else {
+  if (!address) {
     res.status(404);
     throw new Error("Address not found");
-  }
+  } 
+    res.status(200).json({
+      success: true,
+      message: `Address with the id ${req.params.id} removed`,
+    });
 });
 
 module.exports = {

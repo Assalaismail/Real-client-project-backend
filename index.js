@@ -13,9 +13,15 @@ const conn = mongoose.connection;
 const cartRouter = require("./routes/cart");
 const orderRouter = require("./routes/order");
 const itemRouter = require("./routes/items");
-const contactRouter = require("./routes/contact");
-const catRouter = require("./routes/categories");
-const port = process.env.PORT || 8000;
+const contactusRoutes = require("./routes/contact");
+const userRoutes = require("./routes/user.js");
+const addressRoutes = require("./routes/address.js");
+
+const catRouter = require("./routes/categories")
+
+
+connection();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
@@ -29,7 +35,9 @@ app.use("/item", itemRouter);
 app.use("/cat", catRouter);
 app.use("/cart", cartRouter);
 
-app.use("/contactus", contactRouter);
+const port = process.env.PORT || 8000;
+
+app.use("/contactus", contactusRoutes);
 app.use("/api", require("./routes/user")); //raoul route for users
 app.use(errorHandler); //error handler for default stack response
 app.listen(port, () => console.log(`server listening on port ${port}`));

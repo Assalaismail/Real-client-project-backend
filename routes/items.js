@@ -2,12 +2,17 @@ const express = require('express');
 const router = express.Router();
 const upload= require('../middleware/upload')
 
-const {getitems,postitems,deleteitems, updateitems}=require("../controllers/items");
+const {getitembyid,getitems,getItemsByCategory, getItemsByCategoryName, postitems,deleteitems, updateitems}=require("../controllers/items");
 
 router.get("/getitem",getitems)
+router.get("/getitem/:id", getitembyid);
+router.get("/items/:category_id", getItemsByCategory );
+router.get("/products/:categoryName", getItemsByCategoryName );
+
+
 router.post("/additem",upload.single('image'),postitems)
 router.delete("/delitem/:id",deleteitems)
-router.put("/upditem/:id",updateitems)
+router.put("/upditem/:id",upload.single('image'),updateitems)
 
 
 module.exports=router;
