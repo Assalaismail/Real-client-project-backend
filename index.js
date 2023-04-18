@@ -13,6 +13,9 @@ const { errorHandler } = require("./middleware/errormiddleware");
 const conn = mongoose.connection;
 const itemRouter = require("./routes/items");
 const contactusRoutes = require("./routes/contact");
+const userRoutes = require("./routes/user.js");
+const addressRoutes = require("./routes/address.js");
+
 const catRouter = require("./routes/categories")
 
 
@@ -30,6 +33,7 @@ app.use("/cat", catRouter);
 const port = process.env.PORT || 8000;
 
 app.use("/contactus", contactusRoutes);
-app.use("/api", require("./routes/user")); //raoul route for users
+app.use("/api",userRoutes);
+app.use("/address", addressRoutes);
 app.use(errorHandler); //error handler for default stack response
 app.listen(port, () => console.log(`server listening on port ${port}`));
