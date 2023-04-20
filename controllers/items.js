@@ -202,6 +202,18 @@ const getItemsByCategoryName = async (req, res) => {
   }
 
 };
+/////////////////////discounts
+const getdiscount = async (req, res) => {
+  console.log("ENTERED GET ITEM")
+  try {
+    const items = await itemsModels.find({ discount_per: { $ne: 0 } }).populate("category");
+    console.log("ITEM: ", items);
+    res.status(200).json(items);
+  } catch (err) {
+    res.json({ message: err });
+  }
+}
+
 
   
 module.exports={
@@ -212,4 +224,5 @@ module.exports={
   postitems,
   deleteitems,
   updateitems,
+  getdiscount,
  }
