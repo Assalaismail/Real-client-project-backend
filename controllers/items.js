@@ -73,7 +73,6 @@ function calculateDiscountedPrice(price, discountPercentage) {
         },
         discount_per: discountPercentage,
         price_after_discount: priceAfterDiscount,
-       
             });
           
        return res.status(200).json({message: "product created successfully"})
