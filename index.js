@@ -17,7 +17,9 @@ const contactusRoutes = require("./routes/contact");
 const userRoutes = require("./routes/user.js");
 const addressRouter = require("./routes/address.js");
 
-const catRouter = require("./routes/categories")
+const catRouter = require("./routes/categories");
+const favRouter = require("./routes/favorite");
+
 
 
 connection();
@@ -35,6 +37,9 @@ app.use("/item", itemRouter);
 app.use("/cat", catRouter);
 app.use("/cart", cartRouter);
 app.use('/adress', addressRouter )
+app.use("/fav", favRouter);
+
+
 const port = process.env.PORT || 8000;
 
 app.use("/contactus", contactusRoutes);
