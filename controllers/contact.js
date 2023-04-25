@@ -1,5 +1,5 @@
 const express = require("express");
-const asyncHandler = require('express-async-handler')
+const asyncHandler = require("express-async-handler");
 const Contactus = require("../models/contact");
 
 const getcontactus = async (req, res) => {
@@ -12,7 +12,7 @@ const getcontactus = async (req, res) => {
 };
 
 const postcontactus = async (req, res) => {
-  if (!req.body.fullName || !req.body.Message || !req.body.mail) {
+  if (!req.body.fullName || !req.body.message || !req.body.mail) {
     res.status(400).json({ message: "Error" });
   } else {
     const contactpost = await Contactus.create({
@@ -24,16 +24,16 @@ const postcontactus = async (req, res) => {
   }
 };
 
-const contUs = asyncHandler(async(req, res) => {
+const contUs = asyncHandler(async (req, res) => {
   const result = await Contactus.findByIdAndRemove(req.params.id);
 
-  if(!result) {
-    res.status(400)
-    throw new Error('mesh mawjoud aslan la nemhi');
+  if (!result) {
+    res.status(400);
+    throw new Error("mesh mawjoud aslan la nemhi");
   }
 
-  res.status(200).json({id: req.params.id})
-})
+  res.status(200).json({ id: req.params.id });
+});
 
 module.exports = {
   getcontactus,
