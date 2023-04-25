@@ -6,10 +6,11 @@ const {
   getAddressById,
   updateAddress,
   deleteAddress,
-} = require("../controllers/address");
+} = require("../controllers/address.js");
 const { protect } = require("../middleware/authMiddleware");
 
-router.route("/").get(getAddresses).post(createAddress);
-router.route("/:id").get(getAddressById).put(updateAddress).delete(deleteAddress);
+router.route("/").get(getAddresses)
+router.route("/:id").get(getAddressById).patch(updateAddress).delete(deleteAddress)
+router.post("/:id", createAddress)
 
 module.exports = router;
