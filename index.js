@@ -16,7 +16,9 @@ const contactusRoutes = require("./routes/contact");
 const userRoutes = require("./routes/user.js");
 const addressRoutes = require("./routes/address.js");
 
-const catRouter = require("./routes/categories")
+const catRouter = require("./routes/categories");
+const favRouter = require("./routes/favorite");
+
 
 
 connection();
@@ -29,6 +31,8 @@ app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use("/item", itemRouter);
 app.use("/cat", catRouter);
+app.use("/fav", favRouter);
+
 
 const port = process.env.PORT || 8000;
 
