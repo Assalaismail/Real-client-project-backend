@@ -15,7 +15,7 @@ const orderRouter = require("./routes/order");
 const itemRouter = require("./routes/items");
 const contactusRoutes = require("./routes/contact");
 const userRoutes = require("./routes/user.js");
-const addressRoutes = require("./routes/address.js");
+const addressRouter = require("./routes/address.js");
 
 const catRouter = require("./routes/categories")
 
@@ -34,7 +34,7 @@ app.use("/order", orderRouter);
 app.use("/item", itemRouter);
 app.use("/cat", catRouter);
 app.use("/cart", cartRouter);
-
+app.use('/adress', addressRouter )
 const port = process.env.PORT || 8000;
 
 app.use("/contactus", contactusRoutes);

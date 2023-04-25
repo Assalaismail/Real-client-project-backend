@@ -1,25 +1,34 @@
 const asyncHandler = require("express-async-handler");
-const Address = require("../models/address");
+const Address = require("../models/address.js");
 
 // Create a new address
 const createAddress = asyncHandler(async (req, res) => {
-  const {name, phone, email, city, street, building, floor, details, location } = req.body;
-
-  const address = await Address.create({
+  let userID = req.params.id;
+  const {
     name,
     phone,
     email,
     city,
     street,
     building,
-    floor,
+
     details,
-    location,
+  } = req.body;
+
+  const address = await Address.create({
+    userID,
+    name,
+    phone,
+    email,
+    city,
+    street,
+    building,
+
+    details,
   });
 
-  res.status(201).json({
-    success: true,
-    data: address,
+  res.status(201).send({
+    address,
   });
 });
 
@@ -35,7 +44,8 @@ const getAddresses = asyncHandler(async (req, res) => {
 
 // Get single address
 const getAddressById = asyncHandler(async (req, res) => {
-  const address = await Address.findById(req.params.id);
+  let id = req.params.id;
+  const address = await Address.findOne({ userID: id });
 
   if (address) {
     res.status(200).json({
@@ -50,17 +60,26 @@ const getAddressById = asyncHandler(async (req, res) => {
 
 // Update an address
 const updateAddress = asyncHandler(async (req, res) => {
-  const address = await Address.findById(req.params.id);
-  if(!address) {
-      res.status(400)
-      throw new Error('address not found');
+  let id = req.params.id;
+
+  const address = await Address.findOne({ userID: id });
+  if (!address) {
+    res.status(400);
+    throw new Error("address not found");
+  } else {
+    address.name = req.body.name;
+    address.phone = req.body.phone;
+    address.email = req.body.email;
+    address.city = req.body.city;
+    address.street = req.body.street;
+    address.building = req.body.building;
+    address.details = req.body.details;
   }
 
-  const updatedAddress = await Address.findByIdAndUpdate(req.params.id, req.body, {
-      new: true, 
-  })
-  res.status(200).json(updatedAddress)
-})
+  updated = await address.save();
+
+  res.status(200).json(updated);
+});
 
 // Delete an address
 const deleteAddress = asyncHandler(async (req, res) => {
@@ -69,11 +88,11 @@ const deleteAddress = asyncHandler(async (req, res) => {
   if (!address) {
     res.status(404);
     throw new Error("Address not found");
-  } 
-    res.status(200).json({
-      success: true,
-      message: `Address with the id ${req.params.id} removed`,
-    });
+  }
+  res.status(200).json({
+    success: true,
+    message: `Address with the id ${req.params.id} removed`,
+  });
 });
 
 module.exports = {

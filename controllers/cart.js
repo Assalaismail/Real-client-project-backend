@@ -16,15 +16,16 @@ const addToCart = asyncHandler(async (req, res) => {
   let itemIndex = cart.items.findIndex(
     (p) => p.item_id.toString() === productId.toString()
   );
-  console.log(itemIndex, "babababab");
+ 
+  
   if (product.discount_per > 0) {
-    console.log("bbbbbbb");
+
     item.unit = product.price_after_discount;
   } else {
     item.unit = product.price;
   }
   if (itemIndex > -1) {
-    console.log("aaaaaaa");
+    
     let productItem = cart.items[itemIndex];
     productItem.qty += 1;
     cart.items[itemIndex] = productItem;
@@ -38,31 +39,61 @@ const addToCart = asyncHandler(async (req, res) => {
 
 const removeFromCart = asyncHandler(async (req, res) => {
   const userId = req.params.id;
-  const productId = req.body.productId;
-
+  const productId = req.params.key
+console.log(productId)
   let cart = await Carts.findOne({ userId });
+
   let itemIndex = cart.items.findIndex(
     (p) => p.item_id.toString() === productId.toString()
   );
+  console.log(itemIndex)
   if (itemIndex > -1) {
     let product = cart.items[itemIndex];
     let sum = product.qty * product.unit;
     cart.items.splice(itemIndex, 1);
     cart.total -= sum;
     cart = await cart.save();
-    return res.status(200).send(cart);
+    return res.status(201).send(cart);
   } else {
-    res.status(201).json("item does not exist")
+    res.status(400).json("item does not exist")
   }
 });
 
 const getCart = asyncHandler(async (req, res) => {
   const userId = req.params.id;
-  let cart = await Carts.findOne({ userId }).populate('items.item_id').populate('user_id')
+  let cart = await Carts.findOne({ userId }).populate('items.item_id','name weight image')
   
  
   
   res.status(201).send(cart);
 });
 
-module.exports = { removeFromCart, addToCart, getCart };
+
+
+const reduceFromCart =asyncHandler(async(req,res)=>{
+  const userId = req.params.id;
+  const productId = req.body.productId;
+  let cart = await Carts.findOne({ userId });
+  let itemIndex = cart.items.findIndex(
+    (p) => p.item_id.toString() === productId.toString()
+  );
+  if(itemIndex> -1){
+    let product = cart.items[itemIndex];
+    if (product.qty==1){
+      cart.items.splice(itemIndex, 1);
+      cart.total-=product.unit
+    }else if (product.qty>1){
+      product.qty-=1
+      cart.total-=product.unit
+
+    }
+    cart = await cart.save();
+    return res.status(201).send(cart);
+
+    
+  }else{
+    res.status(500).json("something went wrong ")
+  }
+
+})
+module.exports = { removeFromCart, addToCart, getCart ,reduceFromCart};
