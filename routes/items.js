@@ -14,7 +14,7 @@ router.get("/getdiscount",getdiscount)
 
 router.post("/additem",upload.single('image'),postitems)
 router.delete("/delitem/:id",deleteitems)
-router.put("/upditem/:id",upload.single('image'),updateitems)
+router.put("/upditem/:id",updateitems)
 
 
 module.exports=router;

@@ -81,9 +81,36 @@ const deletefavitems = async (req, res) => {
     }
   };
 
+//update a product
+const updatefavitems=async(req,res)=>{
+  try{
+      const item = await itemsFav.findById(req.params.id);
+      if (!item) { 
+        return res.status(404).json({ error: true, message: 'Item not found' });
+      }
+
+      if (req.body.name_fav) {
+          item.name_fav = req.body.name_fav;
+      }
+      if (req.body.price_fav) {
+          item.price_fav = req.body.price_fav;
+      }
+        
+      const updatedItem = await item.save();
+      return res.status(200).json({ message: 'Favorite item updated successfully' });
+  }
+  catch(err){
+      console.log("error ",err);
+      return res.status(500).json({ error: true, message: 'Server error' });
+  }
+}
+
+
+
 module.exports={
     getfavbyid,
     getfavitems,
     postfavitems,
     deletefavitems,
+    updatefavitems,
    }
