@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const upload= require('../middleware/upload')
+const { protect } = require("../middleware/authMiddleware");
+
 
 const {getitembyid,getitems,getdiscount,getItemsByCategory, getItemsByCategoryName, postitems,deleteitems, updateitems}=require("../controllers/items");
 
@@ -12,9 +14,9 @@ router.get("/getdiscount",getdiscount)
 
 
 
-router.post("/additem",upload.single('image'),postitems)
-router.delete("/delitem/:id",deleteitems)
-router.put("/upditem/:id",upload.single('image'),updateitems)
+router.post("/additem",protect,upload.single('image'),postitems)
+router.delete("/delitem/:id",protect,deleteitems)
+router.put("/upditem/:id",protect,updateitems)
 
 
 module.exports=router;
