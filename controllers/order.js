@@ -6,15 +6,8 @@ const Address = require("../models/address.js");
 
 let mailTransporter = nodemailer.createTransport({
   service: "gmail",
-  auth: { user: "dev.shantkel@gmail.com", pass: "jhuatnhmrmfofhmr" },
+  auth: { user: "storedayaa@gmail.com", pass: "tdfxykfcvjpfbnyr" },
 });
-// let details={
-//   from:"storedayaa@gmail.com",
-//   to:"shantk650@gmail.com",
-//   subject:"testing nodemailer",
-//   text:"hello madafaka",
-//   html: `<div>${order}</div>`
-// }
 
 const checkOut = asyncHandler(async (req, res) => {
   let userId = req.params.id;
@@ -22,40 +15,40 @@ const checkOut = asyncHandler(async (req, res) => {
     "items.item_id",
     "name weight "
   );
+ 
 
-  let address = await Address.findOne({ userID: userId }); 
+  let address = await Address.findOne({ userID: userId });
   let itemz = order.items;
-  if(order.items.length<-1){
-  let html_element = "";
-  itemz.forEach((element) => {
-    html_element =
-      html_element +
-      "Item  :" +
-      "<b>" +
-      element.item_id.name +
-      "</b>" +
-      " , " +
-      "quantity  :" +
-      "<b>" +
-      element.qty +
-      "</b>" +
-      " , " +
-      "Unit Price  :" +
-      "<b>" +
-      element.unit +
-      "</b>" +
-      "<br>" +
-      "<br>";
-  });
 
-  
+  if (order.items.length > 0) {
+    let html_element = "";
+    itemz.forEach((element) => {
+      html_element =
+        html_element +
+        "Item  :" +
+        "<b>" +
+        element.item_id.name +
+        "</b>" +
+        " , " +
+        "quantity  :" +
+        "<b>" +
+        element.qty +
+        "</b>" +
+        " , " +
+        "Unit Price  :" +
+        "<b>" +
+        element.unit +
+        "</b>" +
+        "<br>" +
+        "<br>";
+    });
 
-  let details = {
-    from: "dev.shantkel@gmail.com",
-    to: "shantk650@gmail.com",
-    subject: "testing nodemailer",
-    text: "hello madafaka",
-    html: `<div>Name:  <b>${address.name}</b></div>
+    let details = {
+      from: "storedayaa@gmail.com",
+      to: "Dayaastore.lb@gmail.com",
+      subject: "Incoming order",
+      text: "Orders",
+      html: `<div>Name:  <b>${address.name}</b></div>
     <br/>
     <div>Phone:  <b>${address.phone}</b></div>
     <br/>
@@ -71,33 +64,28 @@ const checkOut = asyncHandler(async (req, res) => {
     <br/>
     <div>${html_element}</div>
     <div>Order Total:  <b>${order.total}$</b></div>`,
-  };
-  mailTransporter.sendMail(details, (err) => {
-    if (err) {
-      console.log("there was an error", err);
-    } else {
-      console.log("mail sent successfully!");
+    };
+    mailTransporter.sendMail(details, (err) => {
+      if (err) {
+        console.log("there was an error", err);
+      } else {
+        console.log("mail sent successfully!");
+      }
+    });
+    let checkout = await Orders.create({
+      user_id: order.user_id,
+      items: order.items,
+      total: order.total,
+      status: "complete",
+    });
+
+    if (checkout) {
+      order.items = [];
+      order.total = 0;
+      order.save();
+      res.status(201).json("checkout successfull");
     }
-  });
-  let checkout = await Orders.create({
-    user_id: order.user_id,
-    items: order.items,
-    total: order.total,
-    status: "complete",
-  });
-
-  if (checkout) {
-    order.items=[]
-    order.total=0
-    order.save()
-    res.status(201).json("checkout successfull");
-  }
-}else(res.status(404).send("There are no items in the cart to checkout!"))
-
-  
-
-  
-  
+  } else res.status(404).send("There are no items in the cart to checkout!");
 });
 
 const getOrders = asyncHandler(async (req, res) => {

@@ -10,7 +10,7 @@ const addToCart = asyncHandler(async (req, res) => {
   const userId = req.params.id;
   
   const productId = req.body.productId;
-  console.log("aaa",productId)
+ 
   let cart = await Carts.findOne({user_id: userId });
  
   let product = await Product.findOne({ _id: productId });
