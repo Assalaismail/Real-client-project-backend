@@ -8,8 +8,11 @@ let ObjectId = Schema.ObjectId;
 
 const addToCart = asyncHandler(async (req, res) => {
   const userId = req.params.id;
+  
   const productId = req.body.productId;
-  let cart = await Carts.findOne({ userId });
+ 
+  let cart = await Carts.findOne({user_id: userId });
+ 
   let product = await Product.findOne({ _id: productId });
   let item = { item_id: ObjectId, qty: 1, unit: 0 };
   item.item_id = productId;
@@ -17,7 +20,7 @@ const addToCart = asyncHandler(async (req, res) => {
     (p) => p.item_id.toString() === productId.toString()
   );
  
-  
+  if(cart && product){
   if (product.discount_per > 0) {
 
     item.unit = product.price_after_discount;
@@ -35,13 +38,16 @@ const addToCart = asyncHandler(async (req, res) => {
   cart.total += item.unit;
   let carta = await cart.save();
   return res.status(201).send(carta);
+}else{
+  res.status(400).json("something went wrong")
+}
 });
 
 const removeFromCart = asyncHandler(async (req, res) => {
   const userId = req.params.id;
   const productId = req.params.key
 console.log(productId)
-  let cart = await Carts.findOne({ userId });
+  let cart = await Carts.findOne({ user_id:userId });
 
   let itemIndex = cart.items.findIndex(
     (p) => p.item_id.toString() === productId.toString()
@@ -61,7 +67,7 @@ console.log(productId)
 
 const getCart = asyncHandler(async (req, res) => {
   const userId = req.params.id;
-  let cart = await Carts.findOne({ userId }).populate('items.item_id','name weight image')
+  let cart = await Carts.findOne({ user_id:userId }).populate('items.item_id','name weight image')
   
  
   
@@ -73,7 +79,7 @@ const getCart = asyncHandler(async (req, res) => {
 const reduceFromCart =asyncHandler(async(req,res)=>{
   const userId = req.params.id;
   const productId = req.body.productId;
-  let cart = await Carts.findOne({ userId });
+  let cart = await Carts.findOne({ user_id:userId });
   let itemIndex = cart.items.findIndex(
     (p) => p.item_id.toString() === productId.toString()
   );

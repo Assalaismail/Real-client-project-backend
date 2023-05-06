@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 const asyncHandler = require('express-async-handler')
 const User = require('../models/user')
 const Carts = require('../models/cart')
+const address = require("../models/address")
 
 //generate JWT token
 const generateToken = (id) => {
@@ -69,6 +70,21 @@ const registerUser = asyncHandler(async(req, res) => {
       total:0,
       
     })
+    address.create({
+      userID: user.id,
+      name: " ",
+      phone: " ",
+      street: " ",
+      city:" ",
+      email: " ",
+      building: " ",
+      details:" ",
+      
+
+    })
+
+
+    
 
     res.status(201).json({
       _id: user.id,
@@ -108,15 +124,15 @@ const loginUser = asyncHandler(async(req, res) => {
   }
 })
 
-const deleteAllUsers = asyncHandler(async (req, res) => {
-  const result = await User.deleteMany({});
-  res.status(200).json({ message: `${result.deletedCount} users have been deleted.` });
-});
+// const deleteAllUsers = asyncHandler(async (req, res) => {
+//   const result = await User.deleteMany({});
+//   res.status(200).json({ message: `${result.deletedCount} users have been deleted.` });
+// });
 
 module.exports = {
   registerUser,
   loginUser,
-  deleteAllUsers,
+  // deleteAllUsers,
   getUsers,
   getUser
 }
