@@ -89,7 +89,7 @@ const checkOut = asyncHandler(async (req, res) => {
 });
 
 const getOrders = asyncHandler(async (req, res) => {
-  const orders = await Orders.find().populate("user_id");
+  const orders = await Orders.find().populate("user_id").populate("items.item_id",'name weight image');
   res.status(201).json(orders);
 });
 
